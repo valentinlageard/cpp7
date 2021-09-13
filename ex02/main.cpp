@@ -1,7 +1,77 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "Array.hpp"
 
-int main( void ) {
+#define MAX_VAL 750
+
+void test_int();
+void test_double();
+void test_string();
+
+int main(int, char**)
+{
+	// TESTS given by the exercise
+
+	Array<int> numbers(MAX_VAL);
+	int* mirror = new int[MAX_VAL];
+	std::srand(time(NULL));
+	for (int i = 0; i < MAX_VAL; i++)
+	{
+		const int value = rand();
+		numbers[i] = value;
+		mirror[i] = value;
+	}
+	//SCOPE
+	{
+		Array<int> tmp = numbers;
+		Array<int> test(tmp);
+	}
+
+	for (int i = 0; i < MAX_VAL; i++)
+	{
+		if (mirror[i] != numbers[i])
+		{
+			std::cerr << "didn't save the same value!!" << std::endl;
+			return 1;
+		}
+	}
+	try
+	{
+		numbers[-2] = 0;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	try
+	{
+		numbers[MAX_VAL] = 0;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+
+	for (int i = 0; i < MAX_VAL; i++)
+	{
+		numbers[i] = rand();
+	}
+	delete [] mirror;
+
+	// MY TESTS
+
+	std::string format_line(60, '-');
+	std::cout << format_line << std::endl;
+
+	test_int();
+	test_double();
+	test_string();
+
+	return 0;
+}
+
+void test_int() {
 	std::string format_line(60, '-');
 
 	// INT TESTS
@@ -67,6 +137,10 @@ int main( void ) {
 	}
 
 	std::cout << format_line << std::endl;
+}
+
+void test_double() {
+	std::string format_line(60, '-');
 
 	// DOUBLE TESTS
 
@@ -131,6 +205,10 @@ int main( void ) {
 	}
 
 	std::cout << format_line << std::endl;
+}
+
+void test_string() {
+	std::string format_line(60, '-');
 
 	// STRING TESTS
 
@@ -197,6 +275,4 @@ int main( void ) {
 	}
 
 	std::cout << format_line << std::endl;
-
-	return 0;
 }
